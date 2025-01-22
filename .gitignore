@@ -1,0 +1,5 @@
+# Cache python
+__pycache__
+# Ignorer le fichier README.md
+README.md
+
