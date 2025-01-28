@@ -55,10 +55,13 @@ class Plateau:
     #Renvoie le nombre de ligne
     def getLargeur(self) :
         return self.largeur
+    
+    def getLignes(self) :
+        return self.lignesPlateau
 
     #To String
     def __str__(self):
-        chaine = "\n"
+        chaine = ""
         for i in range(self.getLargeur()) :
             chaine += self.lignesPlateau[i] + "\n"
         return chaine
