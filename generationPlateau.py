@@ -20,10 +20,8 @@ import random
 # coins : force la mise en place de l'arrivée
 #         et du départ dans les coins opposées.
 #
-def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) -> list:
-    
-    # TODO largeur et longueur aléatoire
-    
+def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) -> p.Plateau:
+
     # Génération des lignes vides
     lignes_plateau = [""] * largeur
     
@@ -38,34 +36,42 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
             else:
                 lignes_plateau[i] += "O"
     
-    # Création du plateau
+    # Création du plateau pour modifier ses cases.
     plateau = p.Plateau(lignes_plateau)
     
+    # Placement du point A et D
+    
+    # Définition de l'emplacement des points A et D
+    coinXYA = [0, 0]
+    coinXYD = [longueur - 1, largeur - 1]
     if coins:
+        coinXYA[0] = int((longueur - 1) / 2)
+        coinXYA[1] = int((largeur - 1) / 2)
+        coinXYD = coinXYA
         
-        # TODO forcer le placement des points dans les coins
-        pass
+        # Le point A aura plus tendance à aller en bas à droite
+        # alors que le point D aura plus tendance à aller en haut à gauche.
+        
+    # Détermination de manière aléatoire de l'emplacement des points.
+    pointA = (random.randint(coinXYA[1], largeur - 1), random.randint(coinXYA[0], longueur - 1))
+    pointD = (random.randint(0, coinXYD[1]), random.randint(0, coinXYD[0]))
+        
+    # On place d'abord le point D
+    plateau.setCase(pointD[0], pointD[1], "D")
+        
+    if pointA[0] != pointD[0] or pointA[1] != pointD[1]:
+        plateau.setCase(pointA[0], pointA[1], "A") 
+        
+    # Résolution du placement de A si les deux points se superposent.
     else:
-        
-        pointA = (random.randint(0, largeur - 1), random.randint(0, longueur - 1))
-        pointD = (random.randint(0, largeur - 1), random.randint(0, longueur - 1))
-        
-        plateau.setCase(pointD[0], pointD[1], "D")
-        
-        if pointA[0] != pointD[0] or pointA[1] != pointD[1]:
-            plateau.setCase(pointA[0], pointA[1], "A") 
-        
-        # Résolution du placement de A si les deux points se superposent.
-        else:
             
-            # En résumé, on décale d'un de hauteur.
-            if pointA[0] != 0:
-                plateau.setCase(pointA[0] - 1, pointA[1], "A")   
-            else:
-                plateau.setCase(pointA[0] + 1, pointA[1], "A")  
+        # En résumé, on décale d'un de hauteur selon la position de A.
+        if pointA[0] != 0:
+            plateau.setCase(pointA[0] - 1, pointA[1], "A")   
+        else:
+            plateau.setCase(pointA[0] + 1, pointA[1], "A")  
         
     return plateau
         
 if __name__ == "__main__":
-    for i in range(1000):
-        print(genererPlateau(10, 10, .9, False))
+    print(genererPlateau(14, 10, .2, True).estValide())
