@@ -3,6 +3,8 @@
 # IUT de Rodez, pas de droits réservés
 #
 
+import plateau
+
 #
 # Implémente un algorithme afin de trouver le plus court chemin 
 # dans n'importe quels graphes.
@@ -12,7 +14,7 @@
 #
 #
 class AlgorithmeAEtoile:
-    
+
     #
     # Construit une instance de l'algorithme de parcours.
     # plateau : une instance d'un plateau généré.
@@ -21,9 +23,7 @@ class AlgorithmeAEtoile:
     #                     Permet de calculer l'heuristique d'un point donné.
     #
     def __init__(plateau: Plateau, calculHeuristique: lambda):
-        
-        # TODO algorithme de base
-        
+
         #
         # Méthode qui permet de calculer l'heuristique des points voisins
         # avec en entrée une liste de tuples des prochains points
@@ -39,15 +39,18 @@ class AlgorithmeAEtoile:
         
         # Liste de tuples des points à ignorer.
         self.listeFermee = []
+
+        # Liste de points du chemin critique.
+        self.cheminCritique = []
         
         # Plateau sélectionné
-        self.plateau = plateau
+        self.plateauParcouru = plateau
     
     #
     # Calcule la suite du chemin avec les points voisins
     # et donne le nouveau point parcouru.
     #
-    def parcourirProchainPoint() -> tuple:
+    def parcourirProchainPoint():
         
         # TODO méthode
         pass
