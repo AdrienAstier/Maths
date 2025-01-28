@@ -40,7 +40,7 @@ class Plateau:
                 elif(case != 'O' and case != 'X') :
                     valide = False
 
-        return valide
+        return valide and aPresent and dPresent
 
     def getLongueur(self) :
         return self.longueur
@@ -48,12 +48,8 @@ class Plateau:
     def getLargeur(self) :
         return self.largeur
 
-if __name__ == "__main__":
-    # Exemple de plateau
-    lignes = [
-        "AXOXO",
-        "XOOXD"
-    ]
-
-    plateau= Plateau(lignes)
-    print(plateau.estValide())
+    def __str__(self):
+        chaine = "\n"
+        for i in range(self.getLargeur()) :
+            chaine += self.lignesPlateau[i] + "\n"
+        return chaine
