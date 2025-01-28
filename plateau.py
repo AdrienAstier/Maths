@@ -60,8 +60,8 @@ class Plateau:
         return self.lignesPlateau
 
     #To String
-    def __str__(self):
-        chaine = ""
-        for i in range(self.getLargeur()) :
-            chaine += self.lignesPlateau[i] + "\n"
-        return chaine
+    # def __str__(self):
+    #     chaine = ""
+    #     for i in range(self.getLargeur()) :
+    #         chaine += self.lignesPlateau[i] + "\n"
+    #     return chaine
