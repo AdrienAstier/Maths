@@ -31,6 +31,9 @@ class AlgorithmeAEtoile:
         #
         self.calculHeuristique = calculHeuristique
         
+        # Change d'état si le chemin est trouvé au fil des itérations.
+        self.chemin_trouve = False
+        
         # Liste de tuples des points encore en analyse.
         self.listeOuverte = []
         
@@ -39,6 +42,12 @@ class AlgorithmeAEtoile:
         
         # Plateau sélectionné
         self.plateau = plateau
+    
+    #
+    # Calcule la suite du chemin avec les points voisins
+    # et donne le nouveau point parcouru.
+    #
+    def parcourirProchainPoint() -> tuple:
         
-    # TODO méthode pour effectuer la prochaine action de l'algorithme
-    # ex : prochainPoint()
+        # TODO méthode
+        pass
