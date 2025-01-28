@@ -3,7 +3,7 @@
 from plateau import Plateau
 import os
 
-# Import plateau
+# Import plateau, renvoie plateau
 def importationPlateau(cheminFichier):
 
     plateauLu = None
@@ -12,10 +12,10 @@ def importationPlateau(cheminFichier):
         with open(cheminFichier, 'r') as fichier:
             lignes = fichier.readlines()
             
-            for i in range(len(lignes)) :
+            for i in range(len(lignes)) : #Récupère les lignes du fichier
                 lignes[i] = lignes[i].replace("\n", "") #Remplace les \n lu par rien
 
-            plateauLu = plateau.Plateau(lignes)
+            plateauLu = Plateau(lignes)
             
             return plateauLu
     
@@ -26,24 +26,20 @@ def importationPlateau(cheminFichier):
         print(f"Une erreur est survenue : {e}")
         return None
 
-# Génére un nouveau fichier
+# Génére un nouveau fichier et écrit le plateau dedans
 def genererFichier(plateau, nomFichier):
     lignes = plateau.getLignes()
     
     cheminFichier = "plateaux_generes/" + nomFichier + ".txt"
     
     try:
-        with open(cheminFichier, 'w') as fichier:
-            for ligne in lignes:
-                fichier.write(ligne + '\n')
+        with open(cheminFichier, 'w') as fichier: #Ecriture ligne par ligne
+            for i in range(len(lignes) - 1) :
+                fichier.write(lignes[i] + '\n')
+            fichier.write(lignes[len(lignes) - 1]) #Nécessaire pour enlever le dernier saut de ligne
 
         return cheminFichier
     
     except Exception as e:
         print(f"Une erreur est survenue lors de la création du fichier : {e}")
         return None
-
-if __name__ == "__main__":
-    lignes = ["AO", "XX", "OD"]
-    plateau = Plateau(lignes)
-    genererFichier(plateau, "Bonjour")
