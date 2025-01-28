@@ -3,10 +3,18 @@
 # IUT de Rodez, pas de droits réservés
 #
 
+#
+# Implémente un algorithme afin de trouver le plus court chemin 
+# dans n'importe quels graphes.
+#
+# Dans notre cas, il se base sur une heuristique ainsi qu'un plateau
+# avec des obstacles, un point de départ et d'arrivé.
+#
+#
 class AlgorithmeAEtoile:
     
     #
-    # Construit l'instance d'un algorithme de parcours de graphes.
+    # Construit une instance de l'algorithme de parcours.
     # plateau : une instance d'un plateau généré.
     # calculHeuristique : une méthode avec en entrée un tuple du point 
     #                     et un plateau. 
