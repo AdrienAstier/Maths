@@ -37,7 +37,7 @@ class Plateau:
                     dPresent = True
                 elif(case == 'D' and dPresent) :
                     valide = False
-                elif(case != 'O' or case != 'X') :
+                elif(case != 'O' and case != 'X') :
                     valide = False
 
         return valide
@@ -51,8 +51,8 @@ class Plateau:
 if __name__ == "__main__":
     # Exemple de plateau
     lignes = [
-        "AO",
-        "XD"
+        "AXOXO",
+        "XOOXD"
     ]
 
     plateau= Plateau(lignes)
