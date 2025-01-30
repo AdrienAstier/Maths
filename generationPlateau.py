@@ -26,7 +26,7 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
     lignes_plateau = [""] * largeur
     
     # Si le plateau est trop petit
-    if longueur < 3 || largeur < 3:
+    if longueur < 3 or largeur < 3:
         raise Exception("La longueur est la largeur d'un plateau doit être supérieur ou égal à 3.")
     
     # Placement des murs et des chemins aléatoires.
@@ -43,20 +43,30 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
     
     # Définition de l'emplacement des points A et D
     
-    # Si activé, force le point A en bas à droite 
-    # et le point D en haut à gauche.
     if coins:
-        pointA = (largeur - 1, longueur - 1)
-        pointD = (0, 0)
-    
-    # Détermination de manière aléatoire de l'emplacement des points.
+        __placerPointsADCoinsPlateau(plateau)
     else:
-        pointA = (random.randint(coinsXY[1], largeur - 1), random.randint(coinsXY[0], longueur - 1))
-        pointD = (random.randint(coinsXY[1], largeur - 1), random.randint(coinsXY[0], longueur - 1))
+        __placerPointsADAleatoirePlateau(plateau)
         
+    return plateau
+
+#
+# Place le point A et D dans le plateau
+# de manière aléatoire.
+#
+# plateau : un plateau partiellement généré.
+#
+def __placerPointsADAleatoirePlateau(plateau: p.Plateau):
+    
+    longueur = plateau.getLongueur()
+    largeur = plateau.getLargeur()
+    
+    pointA = (random.randint(0, largeur - 1), random.randint(0, longueur - 1))
+    pointD = (random.randint(0, largeur - 1), random.randint(0, longueur - 1))
+    
     # On place d'abord le point D
     plateau.setCase(pointD[0], pointD[1], "D")
-        
+    
     if pointA[0] != pointD[0] or pointA[1] != pointD[1]:
         plateau.setCase(pointA[0], pointA[1], "A") 
         
@@ -68,9 +78,21 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
             plateau.setCase(pointA[0] - 1, pointA[1], "A")   
         else:
             plateau.setCase(pointA[0] + 1, pointA[1], "A")  
-        
-    return plateau
 
+#
+# Place le point A et D dans les coins du plateau.
+# Force le point A en bas à droite et le point D en haut à gauche.
+#
+# plateau : un plateau partiellement généré.
+#
+def __placerPointsADCoinsPlateau(plateau: p.Plateau):
+    
+    pointA = (plateau.getLargeur() - 1, plateau.getLongueur() - 1)
+    pointD = (0, 0)
+    
+    plateau.setCase(pointA[0], pointA[1], "A")
+    plateau.setCase(pointD[0], pointD[1], "D")
+        
 # Debug
 if __name__ == "__main__":
-    print(genererPlateau(14, 10, .2, True).estValide())
+    print(genererPlateau(3, 3, .2, True))
