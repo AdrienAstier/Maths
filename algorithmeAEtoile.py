@@ -15,12 +15,12 @@ class AlgorithmeAEtoile:
     # calculHeuristique : une méthode avec en entrée un tuple du point actuel
     #                     et un plateau. 
     #                     Permet de calculer l'heuristique d'un point donné.
-    def __init__(self, plateau: Plateau, calculHeuristique: lambda):
+    def __init__(self, plateau, calculHeuristique):
 
         # Plateau sélectionné
         self.plateauParcouru = plateau
 
-        if !plateau.estValide() :
+        if not plateau.estValide() :
             raise Exception("Plateau non valide !")
 
         # Méthode qui permet de calculer l'heuristique des points voisins
@@ -36,9 +36,9 @@ class AlgorithmeAEtoile:
         # Liste de points du chemin critique.
         self.cheminCritique = []
         
-        self.depart = recherchePlateau('D')
-        self.arrive = recherchePlateau('A')
-        self.pointActuel = (self.depart[0], self.depart[1], 0, calculHeuristique(self.plateauParcouru, self.pointActuel, self.arrive))
+        self.depart = self.recherchePlateau('D')
+        self.arrive = self.recherchePlateau('A')
+        self.pointActuel = (self.depart[0], self.depart[1], 0, calculHeuristique(self.plateauParcouru, self.depart, self.arrive))
 
         # le premier point de la liste est le départ
         self.listeFermee.append(self.pointActuel)
@@ -66,14 +66,26 @@ class AlgorithmeAEtoile:
         for nbPointsAdj in range(4) :
             if nbPointsAdj % 2 == 0 :
                 i = self.pointActuel[0]
-                j = self.pointActuel[1] + if nbPointsAdj == 0 : -1 else : 1
+
+                if nbPointsAdj == 0 :
+                    ajout = -1
+                else :
+                    ajout = 1
+
+                j = self.pointActuel[1] + ajout
             else :
-                i = self.pointActuel[0] + if nbPointsAdj == 1 : -1 else : 1
+
+                if nbPointsAdj == 1 :
+                    ajout = -1
+                else :
+                    ajout = 1
+
+                i = self.pointActuel[0] + ajout
                 j = self.pointActuel[1]
             
             dansListeFermee = rechercheListePoints((i, j), listeFermee) == False
 
-            if !(dansListeFermee or i < 0 or j < 0 or i > self.plateauParcouru.getLargeur() or j > self.plateauParcouru.getLongueur() or self.plateauParcouru.getCase(i, j) == 'X') :
+            if not(dansListeFermee or i < 0 or j < 0 or i > self.plateauParcouru.getLargeur() or j > self.plateauParcouru.getLongueur() or self.plateauParcouru.getCase(i, j) == 'X') :
                 pointDejaPresent = rechercheListePoints((i, j), listeFermee)
 
                 heuristiquePoint = calculHeuristique(self.plateauParcouru, (i, j), self.arrive)
@@ -139,8 +151,25 @@ class AlgorithmeAEtoile:
     # exécute l'algorithme A* sur le plateau
     def executionAlgo(self) :
         resolu = False
-        while(!resolu) :
+        while(not resolu) :
             try :
                 self.parcourirProchainPoint()
             except :
                 resolu = True
+
+if __name__ == "__main__":
+    lignes = [
+        "DOOXXXOO",
+        "OOXOOOOO",
+        "OXXOXOXX",
+        "OOOOXOOA"
+    ]
+
+    def heuristiqueNulle(plateau, pointActuel, arrive) :
+        return 0
+
+    plateau = plateau.Plateau(lignes)
+
+    test = AlgorithmeAEtoile(plateau, heuristiqueNulle)
+    print(test.plateauParcouru)
+
