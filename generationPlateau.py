@@ -29,6 +29,9 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
     if longueur < 3 or largeur < 3:
         raise Exception("La longueur est la largeur d'un plateau doit être supérieur ou égal à 3.")
     
+    if tauxMurs < 0.0 or tauxMurs > 1.0:
+        raise Exception("Le taux pour la génération des murs doit être entre 0 et 1")
+    
     # Placement des murs et des chemins aléatoires.
     for i in range(largeur):
         for o in range(longueur):
