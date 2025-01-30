@@ -39,22 +39,18 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
     # Création du plateau pour modifier ses cases.
     plateau = p.Plateau(lignes_plateau)
     
-    # Placement du point A et D
-    
     # Définition de l'emplacement des points A et D
-    coinXYA = [0, 0]
-    coinXYD = [longueur - 1, largeur - 1]
+    
+    # Si activé, force le point A en bas à droite 
+    # et le point D en haut à gauche.
     if coins:
-        coinXYA[0] = int((longueur - 1) / 2)
-        coinXYA[1] = int((largeur - 1) / 2)
-        coinXYD = coinXYA
-        
-        # Le point A aura plus tendance à aller en bas à droite
-        # alors que le point D aura plus tendance à aller en haut à gauche.
-        
+        pointA = (largeur - 1, longueur - 1)
+        pointD = (0, 0)
+    
     # Détermination de manière aléatoire de l'emplacement des points.
-    pointA = (random.randint(coinXYA[1], largeur - 1), random.randint(coinXYA[0], longueur - 1))
-    pointD = (random.randint(0, coinXYD[1]), random.randint(0, coinXYD[0]))
+    else:
+        pointA = (random.randint(coinsXY[1], largeur - 1), random.randint(coinsXY[0], longueur - 1))
+        pointD = (random.randint(coinsXY[1], largeur - 1), random.randint(coinsXY[0], longueur - 1))
         
     # On place d'abord le point D
     plateau.setCase(pointD[0], pointD[1], "D")
