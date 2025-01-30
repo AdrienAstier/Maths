@@ -8,7 +8,7 @@ import plateau as p
 import random
 
 #
-# Gère la construction des tableaux.
+# Gère la construction des plateaux aléatoires.
 #
     
 #
@@ -25,7 +25,9 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
     # Génération des lignes vides
     lignes_plateau = [""] * largeur
     
-    # TODO vérifications valeurs invalides
+    # Si le plateau est trop petit
+    if longueur < 3 || largeur < 3:
+        raise Exception("La longueur est la largeur d'un plateau doit être supérieur ou égal à 3.")
     
     # Placement des murs et des chemins aléatoires.
     for i in range(largeur):
@@ -68,6 +70,7 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
             plateau.setCase(pointA[0] + 1, pointA[1], "A")  
         
     return plateau
-        
+
+# Debug
 if __name__ == "__main__":
     print(genererPlateau(14, 10, .2, True).estValide())
