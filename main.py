@@ -1,6 +1,7 @@
 # main.py
 
-
+from gestionFichier import genererFichier
+from gestionFichier import importationPlateau
 
 def affichermMenu():
     print("Bienvenue sur notre application d'optimisation")
@@ -18,19 +19,21 @@ def affichermMenu():
         return None
 
     if choix == 1:
-        print("1 - Importer un plateau")
-        return 1
+        chemin = input("Saisissez le chemin du plateau à importer : ")
+        plateau = importationPlateau(chemin)
+        print(plateau)
     elif choix == 2:
-        print("2 - Générer un plateau")
-        return 2
+        nomFichier = input("Veuillez renseigner un nom de fichier : ")
+        plateau = input("")
+        genererFichier(plateau, nomFichier)
+        print("Le plateau a été généré avec succès dans le dossier 'plateaux_generes'")
+        
     elif choix == 3:
-        print("Vous avez choisi l'Option 3.")
-        return 3
+        print("Résoudre un plateau")
     elif choix == 4:
-        print("Vous avez choisi l'Option 4.")
-        return 4
+        print("Comparer Algo")
     elif choix == 5:
-        print("Vous avez choisi de quitter.")
+        print("Vous avez choisi de quitter le logiciel")
         return
     else:
         print("Choix invalide. Veuillez entrer un nombre entre 1 et 5.")
