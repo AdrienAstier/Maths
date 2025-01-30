@@ -5,7 +5,9 @@ from gestionFichier import importationPlateau
 from generationPlateau import genererPlateau
 
 def affichermMenu():
-    print("Bienvenue sur notre application d'optimisation")
+    
+    print("\nBienvenue sur notre application d'optimisation sur le parcours des graphes !\n")
+    
     print("=== Menu Principal ===")
     print("1 - Importer un plateau")
     print("2 - Générer un plateau")
@@ -14,7 +16,7 @@ def affichermMenu():
     print("5 - Quitter le logiciel")
 
     try:
-        choix = int(input("Veuillez choisir une option (1-5) : "))
+        choix = int(input("\nVeuillez choisir une option (1-5) : "))
     except ValueError:
         print("Entrée invalide. Veuillez entrer un nombre entre 1 et 5.")
         return
@@ -25,10 +27,10 @@ def affichermMenu():
         print(plateau)
     elif choix == 2:
         try :
-            nomFichier = input("Veuillez renseigner un nom de fichier : ")
-            longueur = int(input("Entrez un entier pour la longueur du plateau (longueur ligne) : "))
-            largeur = int(input("Entrez un entier la largeur du plateau (nombre de ligne) : "))
-            taux = float(input("Entrez un nombre flottant pour le taux de murs : "))
+            nomFichier = input("Veuillez renseigner le nom du fichier à enregistrer : ")
+            longueur = int(input("Entrez un entier pour la longueur du plateau (longueur des lignes) : "))
+            largeur = int(input("Entrez un entier la largeur du plateau (nombre de lignes) : "))
+            taux = float(input("Entrez un nombre flottant entre 0 et 1 pour le taux de murs : "))
             coins = bool(input("Entrez un booléen, true ou false, pour placer les départs et arrivé dans les coins : "))
 
             plateau = genererPlateau(longueur, largeur, taux, coins)
