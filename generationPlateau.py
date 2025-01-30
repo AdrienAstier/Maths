@@ -26,7 +26,7 @@ def genererPlateau(longueur: int, largeur: int, tauxMurs: float, coins: bool) ->
     lignes_plateau = [""] * largeur
     
     # Si le plateau est trop petit
-    if longueur < 3 || largeur < 3:
+    if longueur < 3 or largeur < 3:
         raise Exception("La longueur est la largeur d'un plateau doit être supérieur ou égal à 3.")
     
     # Placement des murs et des chemins aléatoires.
