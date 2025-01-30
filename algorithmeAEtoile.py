@@ -38,27 +38,30 @@ class AlgorithmeAEtoile:
         
         self.depart = recherchePlateau('D')
         self.arrive = recherchePlateau('A')
-        self.pointActuel = self.depart
+        self.pointActuel = (self.depart[0], self.depart[1], 0, calculHeuristique(self.plateauParcouru, self.pointActuel, self.arrive))
 
         # le premier point de la liste est le départ
-        self.listeFermee.append((self.depart[0], self.depart[1], 0, calculHeuristique(self.plateauParcouru, self.pointActuel, self.arrive)))
+        self.listeFermee.append(self.pointActuel)
     
     # recherche et renvoie la première position trouvée du caractère donné dans le plateau
-    def recherchePlateau(caractere) :
-        for i in range(plateauParcouru.getLargeur()) :
-            for j in range(plateauParcouru.getLongueur()) :
-                if plateauParcouru.getCase(i, j) == caractere :
+    def recherchePlateau(self, caractere) :
+        for i in range(self.plateauParcouru.getLargeur()) :
+            for j in range(self.plateauParcouru.getLongueur()) :
+                if self.plateauParcouru.getCase(i, j) == caractere :
                     return (i, j)
 
-
+    # renvoi le chemin critique si le plateau est résolu, sinon lève une exception
     def getCheminCritique(self) :
         if len(self.cheminCritique) == 0 :
             raise Exception("Plateau non résolu, pas de chemin critique !")
         # else
         return self.cheminCritique
 
-    # Exécute la prochaine étape de l'algorithme et met à jour le plateau.
+    # Exécute la prochaine étape de l'algorithme et met à jour le plateau si le plateau n'est pas résolu, sinon lève un exception.
     def parcourirProchainPoint(self):
+
+        if len(self.cheminCritique) != 0 :
+            raise Exception("Plateau déjà résolu !")
 
         for nbPointsAdj in range(4) :
             if nbPointsAdj % 2 == 0 :
@@ -71,8 +74,22 @@ class AlgorithmeAEtoile:
             dansListeFermee = rechercheListePoints((i, j), listeFermee) == False
 
             if !(dansListeFermee or i < 0 or j < 0 or i > self.plateauParcouru.getLargeur() or j > self.plateauParcouru.getLongueur() or self.plateauParcouru.getCase(i, j) == 'X') :
-                listeOuverte.append((i, j, rechercheListePoints(self.pointActuel, listeFermee)[2] + 1, calculHeuristique(self.plateauParcouru, (i, j), self.arrive)))
+                pointDejaPresent = rechercheListePoints((i, j), listeFermee)
+
+                heuristiquePoint = calculHeuristique(self.plateauParcouru, (i, j), self.arrive)
+                distanceDepartPoint = self.pointActuel[2] + 1
+
+                if pointDejaPresent != False:
+                    if pointDejaPresent[2] + pointDejaPresent[3] > distanceDepartPoint + heuristiquePoint :
+                        pointDejaPresent[2] = distanceDepartPoint
+                        pointDejaPresent[3] = heuristiquePoint
+                else :
+                    listeOuverte.append((i, j, distanceDepartPoint, heuristiquePoint))
         
+        self.selectionProchainPoint()
+        
+    # sélectionne le prochain point
+    def selectionProchainPoint(self) :
         min = listeOuverte[0][2] + listeOuverte[0][3]
         pointMin = listeOuverte[0]
         for point in listeOuverte :
@@ -82,8 +99,14 @@ class AlgorithmeAEtoile:
                 pointMin = point
         
         self.pointActuel = pointMin
-        self.plateauParcouru.setCase(pointMin[0], pointMin[1], '*')
+        self.listeFermee.append(self.pointActuel)
 
+        if (self.pointActuel[0], self.pointActuel[1]) == self.arrive:
+            self.calculCheminCritique()
+        else :
+            self.plateauParcouru.setCase(pointMin[0], pointMin[1], '*')
+
+    # recherche un point dans la liste et le renvoi
     def rechercheListePoints(pointCherche, liste) :
         for point in liste :
             if point[0] == pointCherche[0] and point[1] == pointCherche[1] :
@@ -91,6 +114,33 @@ class AlgorithmeAEtoile:
         
         return False
 
-    # Calcul le chemin critique à la fin de l'algorithme et l'ajoute au plateau
+    # Calcul le chemin critique et l'ajoute au plateau si le plateau a été résolu, sinon lève une exception
     def calculCheminCritique(self) :
-        pass
+        if (self.pointActuel[0], self.pointActuel[1]) != self.arrive :
+            raise Exception("Le plateau n'a pas été résolu !")
+        
+        self.cheminCritique.insert(0, (self.pointActuel[0], self.pointActuel[1]))
+
+        while (self.pointActuel[0], self.pointActuel[1]) != self.depart :
+            prochaineEtapeCheminCritique(self)
+        
+    # recherche et ajoute le prochain point du chemin critique (arrivée -> départ)
+    def prochaineEtapeCheminCritique(self) :
+        sommeCoos = self.pointActuel[0] + self.pointActuel[1]
+        for point in listeFermee :
+            difference = sommeCoos - point[0] - point[1]
+            if (diffreence == 1 or difference == -1) and (point[2] + 1) == self.pointActuel[2]:
+
+                self.cheminCritique.insert(0, (point[0], point[1]))
+
+                if (point[0] != arrive[0] or point[1] != arrive[1]) :
+                    self.plateauParcouru.setCase(point[0], point[1], '.')
+    
+    # exécute l'algorithme A* sur le plateau
+    def executionAlgo(self) :
+        resolu = False
+        while(!resolu) :
+            try :
+                self.parcourirProchainPoint()
+            except :
+                resolu = True
