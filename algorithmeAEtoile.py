@@ -15,7 +15,13 @@ class AlgorithmeAEtoile:
     # calculHeuristique : une méthode avec en entrée un tuple du point actuel
     #                     et un plateau. 
     #                     Permet de calculer l'heuristique d'un point donné.
-    def __init__(plateau: Plateau, calculHeuristique: lambda):
+    def __init__(self, plateau: Plateau, calculHeuristique: lambda):
+
+        # Plateau sélectionné
+        self.plateauParcouru = plateau
+
+        if !plateau.estValide() :
+            raise Exception("Plateau non valide !")
 
         # Méthode qui permet de calculer l'heuristique des points voisins
         # avec en entrée le plateau , le point actuel et le point d'arrivée.
@@ -24,29 +30,67 @@ class AlgorithmeAEtoile:
         # Liste de tuples des points à ignorer car déjà traités.
         self.listeFermee = []
 
+        # Liste des points dont la distance depuis le départ a déjà été estimée mais pas validée
+        self.listeOuverte = []
+
         # Liste de points du chemin critique.
         self.cheminCritique = []
         
-        # Plateau sélectionné
-        self.plateauParcouru = plateau
+        self.depart = recherchePlateau('D')
+        self.arrive = recherchePlateau('A')
+        self.pointActuel = self.depart
 
-        self.depart = (0,0)#TODO
-        self.arrive = (0,0)#TODO
-        self.pointActuel = (0,0) #TODO
+        # le premier point de la liste est le départ
+        self.listeFermee.append((self.depart[0], self.depart[1], 0, calculHeuristique(self.plateauParcouru, self.pointActuel, self.arrive)))
     
-    def getCheminCritique() :
-        if (len(cheminCritique) == 0) {
+    # recherche et renvoie la première position trouvée du caractère donné dans le plateau
+    def recherchePlateau(caractere) :
+        for i in range(plateauParcouru.getLargeur()) :
+            for j in range(plateauParcouru.getLongueur()) :
+                if plateauParcouru.getCase(i, j) == caractere :
+                    return (i, j)
+
+
+    def getCheminCritique(self) :
+        if len(self.cheminCritique) == 0 :
             raise Exception("Plateau non résolu, pas de chemin critique !")
-        }
         # else
-        return cheminCritique
+        return self.cheminCritique
 
     # Exécute la prochaine étape de l'algorithme et met à jour le plateau.
-    def parcourirProchainPoint():
+    def parcourirProchainPoint(self):
+
+        for nbPointsAdj in range(4) :
+            if nbPointsAdj % 2 == 0 :
+                i = self.pointActuel[0]
+                j = self.pointActuel[1] + if nbPointsAdj == 0 : -1 else : 1
+            else :
+                i = self.pointActuel[0] + if nbPointsAdj == 1 : -1 else : 1
+                j = self.pointActuel[1]
+            
+            dansListeFermee = rechercheListePoints((i, j), listeFermee) == False
+
+            if !(dansListeFermee or i < 0 or j < 0 or i > self.plateauParcouru.getLargeur() or j > self.plateauParcouru.getLongueur() or self.plateauParcouru.getCase(i, j) == 'X') :
+                listeOuverte.append((i, j, rechercheListePoints(self.pointActuel, listeFermee)[2] + 1, calculHeuristique(self.plateauParcouru, (i, j), self.arrive)))
         
-        # TODO méthode
-        pass
-    
+        min = listeOuverte[0][2] + listeOuverte[0][3]
+        pointMin = listeOuverte[0]
+        for point in listeOuverte :
+            sommeDistances = point[2] + point[3]
+            if sommeDistances < min :
+                min = sommeDistances
+                pointMin = point
+        
+        self.pointActuel = pointMin
+        self.plateauParcouru.setCase(pointMin[0], pointMin[1], '*')
+
+    def rechercheListePoints(pointCherche, liste) :
+        for point in liste :
+            if point[0] == pointCherche[0] and point[1] == pointCherche[1] :
+                return point
+        
+        return False
+
     # Calcul le chemin critique à la fin de l'algorithme et l'ajoute au plateau
-    def calculCheminCritique() :
+    def calculCheminCritique(self) :
         pass
