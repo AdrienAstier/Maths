@@ -38,7 +38,7 @@ class AlgorithmeAEtoile:
         
         self.depart = self.recherchePlateau('D')
         self.arrive = self.recherchePlateau('A')
-        self.pointActuel = (self.depart[0], self.depart[1], 0, calculHeuristique(self.plateauParcouru, self.depart, self.arrive))
+        self.pointActuel = (self.depart[0], self.depart[1], 0, calculHeuristique(self.depart, self.arrive))
 
         # le premier point de la liste est le départ
         self.listeFermee.append(self.pointActuel)
@@ -56,6 +56,14 @@ class AlgorithmeAEtoile:
             raise Exception("Plateau non résolu, pas de chemin critique !")
         # else
         return self.cheminCritique
+
+    # recherche un point dans la liste et le renvoi
+    def rechercheListePoints(self, pointCherche, liste) :
+        for point in liste :
+            if point[0] == pointCherche[0] and point[1] == pointCherche[1] :
+                return point
+        
+        return False
 
     # Exécute la prochaine étape de l'algorithme et met à jour le plateau si le plateau n'est pas résolu, sinon lève un exception.
     def parcourirProchainPoint(self):
@@ -83,48 +91,48 @@ class AlgorithmeAEtoile:
                 i = self.pointActuel[0] + ajout
                 j = self.pointActuel[1]
             
-            dansListeFermee = rechercheListePoints((i, j), listeFermee) == False
+            dansListeFermee = self.rechercheListePoints((i, j), self.listeFermee) != False
+            if not dansListeFermee and i >= 0 and j >= 0 and i < self.plateauParcouru.getLargeur() and j < self.plateauParcouru.getLongueur() and self.plateauParcouru.getCase(i, j) != 'X' :
 
-            if not(dansListeFermee or i < 0 or j < 0 or i > self.plateauParcouru.getLargeur() or j > self.plateauParcouru.getLongueur() or self.plateauParcouru.getCase(i, j) == 'X') :
-                pointDejaPresent = rechercheListePoints((i, j), listeFermee)
-
-                heuristiquePoint = calculHeuristique(self.plateauParcouru, (i, j), self.arrive)
+                heuristiquePoint = self.calculHeuristique((i, j), self.arrive)
                 distanceDepartPoint = self.pointActuel[2] + 1
 
+                pointDejaPresent = self.rechercheListePoints((i, j), self.listeOuverte)
                 if pointDejaPresent != False:
                     if pointDejaPresent[2] + pointDejaPresent[3] > distanceDepartPoint + heuristiquePoint :
-                        pointDejaPresent[2] = distanceDepartPoint
-                        pointDejaPresent[3] = heuristiquePoint
+                        pointRemplacement = (pointDejaPresent[0], pointDejaPresent[1], distanceDepartPoint, heuristiquePoint)
+                        pointDejaPresent = pointRemplacement
                 else :
-                    listeOuverte.append((i, j, distanceDepartPoint, heuristiquePoint))
+                    self.listeOuverte.append((i, j, distanceDepartPoint, heuristiquePoint))
         
         self.selectionProchainPoint()
         
     # sélectionne le prochain point
     def selectionProchainPoint(self) :
-        min = listeOuverte[0][2] + listeOuverte[0][3]
-        pointMin = listeOuverte[0]
-        for point in listeOuverte :
+        
+        print(self.listeOuverte, end = " = ouverte / ")
+
+
+        if len(self.listeOuverte) == 0 :
+            raise Exception("Liste ouverte vide !")
+
+        min = self.listeOuverte[0][2] + self.listeOuverte[0][3]
+        pointMin = self.listeOuverte[0]
+        for point in self.listeOuverte :
             sommeDistances = point[2] + point[3]
             if sommeDistances < min :
                 min = sommeDistances
                 pointMin = point
         
         self.pointActuel = pointMin
+        self.listeOuverte.remove(self.pointActuel)
         self.listeFermee.append(self.pointActuel)
 
-        if (self.pointActuel[0], self.pointActuel[1]) == self.arrive:
-            self.calculCheminCritique()
-        else :
+        if (self.pointActuel[0], self.pointActuel[1]) != self.arrive:
             self.plateauParcouru.setCase(pointMin[0], pointMin[1], '*')
 
-    # recherche un point dans la liste et le renvoi
-    def rechercheListePoints(pointCherche, liste) :
-        for point in liste :
-            if point[0] == pointCherche[0] and point[1] == pointCherche[1] :
-                return point
         
-        return False
+        print(self.pointActuel)
 
     # Calcul le chemin critique et l'ajoute au plateau si le plateau a été résolu, sinon lève une exception
     def calculCheminCritique(self) :
@@ -134,45 +142,68 @@ class AlgorithmeAEtoile:
         self.cheminCritique.insert(0, (self.pointActuel[0], self.pointActuel[1]))
 
         while (self.pointActuel[0], self.pointActuel[1]) != self.depart :
-            prochaineEtapeCheminCritique(self)
+            self.prochaineEtapeCheminCritique()
         
     # recherche et ajoute le prochain point du chemin critique (arrivée -> départ)
     def prochaineEtapeCheminCritique(self) :
-        sommeCoos = self.pointActuel[0] + self.pointActuel[1]
-        for point in listeFermee :
-            difference = sommeCoos - point[0] - point[1]
-            if (diffreence == 1 or difference == -1) and (point[2] + 1) == self.pointActuel[2]:
+        for point in self.listeFermee :
+            if (self.pointActuel[0] == point[0] and abs(self.pointActuel[1] - point[1]) == 1 or self.pointActuel[1] == point[1] and abs(self.pointActuel[0] - point[0]) == 1) and (point[2] + 1) == self.pointActuel[2]:
 
                 self.cheminCritique.insert(0, (point[0], point[1]))
+                self.pointActuel = point
 
-                if (point[0] != arrive[0] or point[1] != arrive[1]) :
+                if (point[0] != self.depart[0] or point[1] != self.depart[1]) :
                     self.plateauParcouru.setCase(point[0], point[1], '.')
     
     # exécute l'algorithme A* sur le plateau
     def executionAlgo(self) :
         resolu = False
-        while(not resolu) :
-            try :
-                self.parcourirProchainPoint()
-            except :
-                resolu = True
+        while not resolu :
+            self.parcourirProchainPoint()
+            resolu = (self.pointActuel[0], self.pointActuel[1]) == self.arrive
+        self.calculCheminCritique()
+                
+            
 
 if __name__ == "__main__":
     lignes = [
-        "DOOXXXOO",
-        "OOXOOOOO",
-        "OXXOXOXX",
-        "OOOOXOOA"
+        "DXOOOXOXOOOOOOOXOOOX",
+        "OOOXOOOXXXOOXXOOOXOO",
+        "OOOXOXOOOOOOOOOOXOOO",
+        "OOXOXXOXOOXOOXOOOOOX",
+        "XOXOOOOXOXOOOOOOOOXO",
+        "XOOOOXXOOXOOOXXOOOOA"
     ]
 
-    def heuristiqueNulle(plateau, pointActuel, arrive) :
+    lignesCopie = [
+        "DXOOOXOXOOOOOOOXOOOX",
+        "OOOXOOOXXXOOXXOOOXOO",
+        "OOOXOXOOOOOOOOOOXOOO",
+        "OOXOXXOXOOXOOXOOOOOX",
+        "XOXOOOOXOXOOOOOOOOXO",
+        "XOOOOXXOOXOOOXXOOOOA"
+    ]
+
+    def heuristiqueNulle(pointActuel, arrive) :
         return 0
 
-    plateau = plateau.Plateau(lignes)
+    def heuristiqueVille(pointActuel, arrive) :
+        return abs(arrive[0] - pointActuel[0]) + abs(arrive[1] - pointActuel[1])
 
-    test = AlgorithmeAEtoile(plateau, heuristiqueNulle)
+    def heuristiqueOiseau(pointActuel, arrive) :
+        return abs(arrive[0] - pointActuel[0]) + abs(arrive[1] - pointActuel[1])
+
+    plateauTest = plateau.Plateau(lignes)
+
+    test = AlgorithmeAEtoile(plateauTest, heuristiqueNulle)
     print(test.plateauParcouru)
 
     test.executionAlgo()
     print(test.plateauParcouru)
+    print(len(test.getCheminCritique()))
+
+    test = AlgorithmeAEtoile(plateau.Plateau(lignesCopie), heuristiqueVille)
+    test.executionAlgo()
+    print(test.plateauParcouru)
+    print(len(test.getCheminCritique()))
 
