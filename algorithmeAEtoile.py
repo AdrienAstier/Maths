@@ -173,3 +173,6 @@ if __name__ == "__main__":
     test = AlgorithmeAEtoile(plateau, heuristiqueNulle)
     print(test.plateauParcouru)
 
+    test.executionAlgo()
+    print(test.plateauParcouru)
+
