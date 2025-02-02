@@ -72,23 +72,17 @@ class AlgorithmeAEtoile:
             raise Exception("Plateau déjà résolu !")
 
         for nbPointsAdj in range(4) :
-            if nbPointsAdj % 2 == 0 :
+            if nbPointsAdj == 0 :
+                i = self.pointActuel[0] + 1
+                j = self.pointActuel[1]
+            elif nbPointsAdj == 1 :
                 i = self.pointActuel[0]
-
-                if nbPointsAdj == 0 :
-                    ajout = -1
-                else :
-                    ajout = 1
-
-                j = self.pointActuel[1] + ajout
+                j = self.pointActuel[1] + 1
+            elif nbPointsAdj == 2 :
+                i = self.pointActuel[0]
+                j = self.pointActuel[1] - 1
             else :
-
-                if nbPointsAdj == 1 :
-                    ajout = -1
-                else :
-                    ajout = 1
-
-                i = self.pointActuel[0] + ajout
+                i = self.pointActuel[0] - 1
                 j = self.pointActuel[1]
             
             dansListeFermee = self.rechercheListePoints((i, j), self.listeFermee) != False
@@ -101,17 +95,15 @@ class AlgorithmeAEtoile:
                 if pointDejaPresent != False:
                     if pointDejaPresent[2] + pointDejaPresent[3] > distanceDepartPoint + heuristiquePoint :
                         pointRemplacement = (pointDejaPresent[0], pointDejaPresent[1], distanceDepartPoint, heuristiquePoint)
-                        pointDejaPresent = pointRemplacement
+                        self.listeOuverte.remove(pointDejaPresent)
+                        self.listeOuverte.append(pointRemplacement)
                 else :
-                    self.listeOuverte.append((i, j, distanceDepartPoint, heuristiquePoint))
+                    self.listeOuverte.insert(0, (i, j, distanceDepartPoint, heuristiquePoint))
         
         self.selectionProchainPoint()
         
     # sélectionne le prochain point
     def selectionProchainPoint(self) :
-        
-        print(self.listeOuverte, end = " = ouverte / ")
-
 
         if len(self.listeOuverte) == 0 :
             raise Exception("Liste ouverte vide !")
@@ -130,9 +122,6 @@ class AlgorithmeAEtoile:
 
         if (self.pointActuel[0], self.pointActuel[1]) != self.arrive:
             self.plateauParcouru.setCase(pointMin[0], pointMin[1], '*')
-
-        
-        print(self.pointActuel)
 
     # Calcul le chemin critique et l'ajoute au plateau si le plateau a été résolu, sinon lève une exception
     def calculCheminCritique(self) :
