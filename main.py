@@ -45,6 +45,9 @@ def afficherMenuPrincipal():
             
             if plateau == None:
                 chemin_plateau = "N/A"
+            elif not plateau.estValide():
+                print("Le plateau est invalide est n'a donc pas pu être importé.")
+                chemin_plateau = "N/A"
             
         elif choix == 2:
             afficherMenuGeneration()
@@ -57,6 +60,8 @@ def afficherMenuPrincipal():
             
         elif choix == 5:
             print("Vous avez choisi de quitter le logiciel")
+            continuer = False
+            
         else:
             print("Choix invalide. Veuillez entrer un nombre entre 1 et 5.")
 
@@ -77,6 +82,9 @@ def afficherMenuGeneration():
         plateauGenere = genererPlateau(longueur, largeur, taux, coins)
         genererFichier(plateauGenere, nomFichier)
         print("Le plateau a été généré avec succès dans le dossier 'plateaux_generes'")
+        
+        # Stub
+        resoudrePlateau(plateauGenere)
     
     except ValueError:
         print("Entrée invalide. Mauvais type.")
@@ -94,6 +102,18 @@ def afficherMenuResolution():
 def afficherMenuComparaison():
     # TODO menu
     print("Comparer algorithmes")
+
+#
+# Résout un plateau donné et donne le résultat
+# dans un message.
+#
+def resoudrePlateau(plateau):
+    
+    print("\nRésolution du plateau suivant : \n")
+    print(plateau)
+    print("Validité du plateau : " + str(plateau.estValide()))
+    
+    # TODO résoudre et afficher
 
 # Lance le menu principal
 if __name__ == "__main__":
