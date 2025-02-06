@@ -3,6 +3,10 @@
 # IUT de Rodez, pas de droits réservés
 #
 
+# En rapport avec l'algorithme
+from algorithmeAEtoile import AlgorithmeAEtoile
+import heuristiques
+
 from gestionFichier import genererFichier
 from gestionFichier import importationPlateau
 from generationPlateau import genererPlateau
@@ -109,11 +113,18 @@ def afficherMenuComparaison():
 #
 def resoudrePlateau(plateau):
     
-    print("\nRésolution du plateau suivant : \n")
+    instanceAStar = AlgorithmeAEtoile(plateau, heuristiques.heuristiqueVille)
+    
+    print("\nPlateau à résoudre : \n")
     print(plateau)
     print("Validité du plateau : " + str(plateau.estValide()))
     
-    # TODO résoudre et afficher
+    print("\nRésolution du plateau avec A* (par distance de Manhattan) : \n")
+    try:
+        instanceAStar.executionAlgo()
+        print(instanceAStar.plateauParcouru)
+    except Exception:
+        print("Le chemin entre 'D' et 'A' est impossible !\n")
 
 # Lance le menu principal
 if __name__ == "__main__":
