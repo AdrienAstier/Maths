@@ -1,10 +1,19 @@
-# main.py
+# 
+# main.py                                           28 janvier 2025
+# IUT de Rodez, pas de droits réservés
+#
 
 from gestionFichier import genererFichier
 from gestionFichier import importationPlateau
 from generationPlateau import genererPlateau
 
+#
+# Lance le menu principal avec toutes
+# les options associées.
+#
 def affichermMenu():
+
+    # TODO tourner le menu en boucle même en cas d'erreur
 
     continuer = True
     while(continuer) :
@@ -53,5 +62,6 @@ def affichermMenu():
             print("Choix invalide. Veuillez entrer un nombre entre 1 et 5.")
             continuer = False
 
+# Lance le menu principal
 if __name__ == "__main__":
     affichermMenu()
