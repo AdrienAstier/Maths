@@ -30,9 +30,11 @@ def importationPlateau(cheminFichier):
 def genererFichier(plateau, nomFichier):
     lignes = plateau.getLignes()
     
-    cheminFichier = "plateaux_generes/" + nomFichier + ".txt"
+    cheminPlateaux = "plateaux_generes/"
+    cheminFichier = cheminPlateaux + nomFichier + ".txt"
     
     try:
+        os.makedirs(cheminPlateaux, exist_ok = True) # Crée le dossier s'il n'existe pas.
         with open(cheminFichier, 'w') as fichier: #Ecriture ligne par ligne
             for i in range(len(lignes) - 1) :
                 fichier.write(lignes[i] + '\n')
