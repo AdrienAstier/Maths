@@ -5,7 +5,7 @@ from gestionFichier import importationPlateau
 from generationPlateau import genererPlateau
 
 def affichermMenu():
-<<<<<<< HEAD
+
     continuer = True
     while(continuer) :
         print("\nBienvenue sur notre application d'optimisation sur le parcours des graphes !\n")
