@@ -15,27 +15,37 @@ def affichermMenu():
 
     # TODO tourner le menu en boucle même en cas d'erreur
 
+    print("\nBienvenue sur notre application d'optimisation sur le parcours des graphes !\n")
+
+    # Plateau importé
+    plateau = None
+    chemin_plateau = "N/A"
+
     continuer = True
     while(continuer) :
-        print("\nBienvenue sur notre application d'optimisation sur le parcours des graphes !\n")
-        print("=== Menu Principal ===")
+        
+        print("\n=== Menu Principal ===")
         print("1 - Importer un plateau")
         print("2 - Générer un plateau")
         print("3 - Exécuter l'algorithme A*")
         print("4 - Comparer les algorithmes")
-        print("5 - Quitter le logiciel")
-
-        plateau = None
+        print("5 - Quitter le logiciel\n")
+        
+        print("Plateau importé : " + chemin_plateau)
 
         try:
             choix = int(input("\nVeuillez choisir une option (1-5) : "))
         except ValueError:
-            print("Entrée invalide. Veuillez entrer un nombre entre 1 et 5.")
-            continuer = False
+            choix = -1
 
         if choix == 1:
-            chemin = input("Saisissez le chemin du plateau à importer : ")
-            plateau = importationPlateau(chemin)
+            
+            chemin_plateau = input("Saisissez le chemin du plateau à importer : ")
+            plateau = importationPlateau(chemin_plateau)
+            
+            if plateau == None:
+                chemin_plateau = "N/A"
+            
         elif choix == 2:
             try :
                 nomFichier = input("Veuillez renseigner le nom du fichier à enregistrer : ")
@@ -49,7 +59,6 @@ def affichermMenu():
                 print("Le plateau a été généré avec succès dans le dossier 'plateaux_generes'")
             except ValueError:
                 print("Entrée invalide. Mauvais type.")
-                continuer = False
             
         elif choix == 3:
             print("Résoudre un plateau")
@@ -57,10 +66,8 @@ def affichermMenu():
             print("Comparer Algo")
         elif choix == 5:
             print("Vous avez choisi de quitter le logiciel")
-            continuer = False
         else:
             print("Choix invalide. Veuillez entrer un nombre entre 1 et 5.")
-            continuer = False
 
 # Lance le menu principal
 if __name__ == "__main__":
