@@ -198,6 +198,7 @@ class AlgorithmeAEtoile:
         while not resolu :
             self.parcourirProchainPoint()
             resolu = (self.pointActuel[0], self.pointActuel[1]) == self.arrive
+            
         self.calculCheminCritique()
                 
             
