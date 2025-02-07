@@ -52,7 +52,7 @@ def afficherMenuPrincipal():
                 chemin_plateau = "N/A"
             
         elif choix == 2:
-            afficherMenuGeneration()
+            afficherMenuGeneration(True)
             
         elif choix == 3:
             afficherMenuResolution(plateau)
@@ -70,12 +70,17 @@ def afficherMenuPrincipal():
 #
 # Affiche le menu de génération de plateaux.
 #
-def afficherMenuGeneration():
+# aExporter : True pour que le fichier soit exporté dans le dossier
+#             plateaux_generes, sinon False
+# Retourne le plateau généré
+#
+def afficherMenuGeneration(aExporter: bool):
     
     try:
         
-        nomFichier = input("\nVeuillez renseigner le nom du fichier "
-                         + "à enregistrer => ")
+        if aExporter:
+            nomFichier = input("\nVeuillez renseigner le nom du fichier "
+                             + "à enregistrer => ")
         
         # Variables à vérifier
         longueur = ""
@@ -118,8 +123,10 @@ def afficherMenuGeneration():
         coins = coins == "oui"
 
         plateauGenere = genererPlateau(longueur, largeur, taux, coins)
-        genererFichier(plateauGenere, nomFichier)
-        print("\nLe plateau a été généré avec succès dans le dossier 'plateaux_generes' avec le nom '" + nomFichier + ".txt'")
+        
+        if aExporter:
+            genererFichier(plateauGenere, nomFichier)
+            print("\nLe plateau a été généré avec succès dans le dossier 'plateaux_generes' avec le nom '" + nomFichier + ".txt'")
         
         # Pour qu'il soit utilisé dans d'autres menu.
         return plateauGenere
@@ -147,8 +154,7 @@ def afficherMenuResolution(plateau):
         else:
             print("\nVeuillez importer un plateau avant d'utiliser cette option.\n")
     else:
-        # TODO 
-        pass
+        resoudrePlateau(afficherMenuGeneration(False))
    
 #
 # Affiche le menu de comparaison algorithmique.
