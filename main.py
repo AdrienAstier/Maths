@@ -11,8 +11,6 @@ from gestionFichier import genererFichier
 from gestionFichier import importationPlateau
 from generationPlateau import genererPlateau
 
-# TODO tourner le menu en boucle même en cas d'erreur
-
 #
 # Lance le menu principal avec toutes
 # les options associées.
@@ -77,15 +75,53 @@ def afficherMenuGeneration():
     # TODO éventuellement faire une option pour résoudre après génération le plateau.
     
     try:
-        nomFichier = input("Veuillez renseigner le nom du fichier à enregistrer : ")
-        longueur = int(input("Entrez un entier pour la longueur du plateau (longueur des lignes) : "))
-        largeur = int(input("Entrez un entier la largeur du plateau (nombre de lignes) : "))
-        taux = float(input("Entrez un nombre flottant entre 0 et 1 pour le taux de murs : "))
-        coins = bool(input("Entrez un booléen, true ou false, pour placer les départs et arrivé dans les coins : "))
+        
+        nomFichier = input("\nVeuillez renseigner le nom du fichier "
+                         + "à enregistrer => ")
+        
+        # Variables à vérifier
+        longueur = ""
+        largeur = ""
+        taux= ""
+        coins = ""
+        
+        # Demande des variables à l'utilisateur.
+        
+        longueurOK = False
+        while not longueurOK:
+            longueur = input("Entrez un entier pour la longueur du plateau (longueur des lignes >= 3) => ")
+            longueurOK = longueur.isnumeric() and int(longueur) >= 3
+            if not longueurOK:
+                print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
+        longueur = int(longueur)
+        
+        largeurOK = False
+        while not largeurOK:
+            largeur = input("Entrez un entier pour la largeur du plateau (nombre de lignes >= 3) => ")
+            largeurOK = largeur.isnumeric() and int(largeur) >= 3
+            if not largeurOK:
+                print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
+        largeur = int(largeur)
+        
+        tauxOK = False
+        while not tauxOK:
+            taux = input("Entrez un nombre entre 0 et 1 pour le taux de murs (ex : 0.2) => ")
+            tauxOK = taux.replace('.', '', 1) and float(taux) >= .0 and float(taux) <= 1.0
+            if not tauxOK:
+                print("Le flottant rentré est invalide, ou n'est pas inclut entre 0 et 1\n")
+        taux = float(taux)
+        
+        coinsOK = False
+        while not coinsOK:
+            coins = input("Entrez 'oui', pour placer le départ et l'arrivé dans les coins, sinon 'non' => ")
+            coinsOK = coins == "oui" or coins == "non" 
+            if not coinsOK:
+                print("La réponse doit s'agir de 'oui' ou 'non'\n") 
+        coins = coins == "oui"
 
         plateauGenere = genererPlateau(longueur, largeur, taux, coins)
         genererFichier(plateauGenere, nomFichier)
-        print("Le plateau a été généré avec succès dans le dossier 'plateaux_generes'")
+        print("\nLe plateau a été généré avec succès dans le dossier 'plateaux_generes'")
         
         # Stub
         resoudrePlateau(plateauGenere)
