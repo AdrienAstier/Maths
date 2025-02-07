@@ -121,7 +121,7 @@ def afficherMenuGeneration():
 
         plateauGenere = genererPlateau(longueur, largeur, taux, coins)
         genererFichier(plateauGenere, nomFichier)
-        print("\nLe plateau a été généré avec succès dans le dossier 'plateaux_generes'")
+        print("\nLe plateau a été généré avec succès dans le dossier 'plateaux_generes' avec le nom '" + nomFichier + ".txt'")
         
         # Stub
         resoudrePlateau(plateauGenere)
