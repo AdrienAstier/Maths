@@ -55,7 +55,7 @@ def afficherMenuPrincipal():
             afficherMenuGeneration()
             
         elif choix == 3:
-            afficherMenuResolution()
+            afficherMenuResolution(plateau)
             
         elif choix == 4:
             afficherMenuComparaison()
@@ -71,8 +71,6 @@ def afficherMenuPrincipal():
 # Affiche le menu de génération de plateaux.
 #
 def afficherMenuGeneration():
-    
-    # TODO éventuellement faire une option pour résoudre après génération le plateau.
     
     try:
         
@@ -123,8 +121,8 @@ def afficherMenuGeneration():
         genererFichier(plateauGenere, nomFichier)
         print("\nLe plateau a été généré avec succès dans le dossier 'plateaux_generes' avec le nom '" + nomFichier + ".txt'")
         
-        # Stub
-        resoudrePlateau(plateauGenere)
+        # Pour qu'il soit utilisé dans d'autres menu.
+        return plateauGenere
     
     except ValueError:
         print("Entrée invalide. Mauvais type.")
@@ -132,9 +130,25 @@ def afficherMenuGeneration():
 #
 # Affiche le menu de génération de plateaux.
 #
-def afficherMenuResolution():
-    # TODO menu
-    print("Résoudre un plateau")
+def afficherMenuResolution(plateau):
+    
+    reponse = ""
+    questionOK = False;
+    while not questionOK:
+        reponse = input("Rentrez '1' pour résoudre le plateau importé, '2' pour résoudre un plateau généré => ")
+        questionOK = reponse == "1" or reponse == "2"
+        if not questionOK:
+            print("La réponse doit être '1' ou '2'\n")
+    
+    if reponse == "1":
+        
+        if plateau != None:
+            resoudrePlateau(plateau)
+        else:
+            print("\nVeuillez importer un plateau avant d'utiliser cette option.\n")
+    else:
+        # TODO 
+        pass
    
 #
 # Affiche le menu de comparaison algorithmique.
