@@ -62,7 +62,7 @@ class Plateau:
     #To String
     def __str__(self):
         
-        chaine = "      " + "-" * self.getLargeur() + "\n"
+        chaine = "      " + "-" * self.getLongueur() + "\n"
         for i in range(self.getLargeur()) :
             chaine += str(i).zfill(3) + " | " + self.lignesPlateau[i] + "\n"
         return chaine
