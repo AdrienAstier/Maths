@@ -27,20 +27,19 @@ def importationPlateau(cheminFichier):
         return None
 
 # Génére un nouveau fichier et écrit le plateau dedans
-def genererFichier(plateau, nomFichier):
-    lignes = plateau.getLignes()
+def genererFichier(plateau, cheminFichier, nomFichier):
     
-    cheminPlateaux = "plateaux_generes/"
-    cheminFichier = cheminPlateaux + nomFichier + ".txt"
+    lignes = plateau.getLignes()
+    cheminFichierComplet = cheminFichier + nomFichier + ".txt"
     
     try:
-        os.makedirs(cheminPlateaux, exist_ok = True) # Crée le dossier s'il n'existe pas.
-        with open(cheminFichier, 'w') as fichier: #Ecriture ligne par ligne
+        os.makedirs(cheminFichier, exist_ok = True) # Crée le dossier s'il n'existe pas.
+        with open(cheminFichierComplet, 'w') as fichier: #Ecriture ligne par ligne
             for i in range(len(lignes) - 1) :
                 fichier.write(lignes[i] + '\n')
             fichier.write(lignes[len(lignes) - 1]) #Nécessaire pour enlever le dernier saut de ligne
 
-        return cheminFichier
+        return cheminFichierComplet
     
     except Exception as e:
         print(f"Une erreur est survenue lors de la création du fichier : {e}")

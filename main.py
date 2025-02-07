@@ -19,6 +19,10 @@ def afficherMenuPrincipal():
 
     print("\nBienvenue sur notre application d'optimisation sur le parcours des graphes !\n")
 
+    # Chemins des dossiers pour l'exportation
+    cheminDossierExportation = "plateaux_generes/"
+    cheminDossierResolution = "plateaux_resolus/"
+
     # Plateau importé
     plateau = None
     chemin_plateau = "N/A"
@@ -52,10 +56,10 @@ def afficherMenuPrincipal():
                 chemin_plateau = "N/A"
             
         elif choix == 2:
-            afficherMenuGeneration(True)
+            afficherMenuGeneration(True, cheminDossierExportation)
             
         elif choix == 3:
-            afficherMenuResolution(plateau)
+            afficherMenuResolution(plateau, cheminDossierResolution)
             
         elif choix == 4:
             afficherMenuComparaison()
@@ -71,10 +75,11 @@ def afficherMenuPrincipal():
 # Affiche le menu de génération de plateaux.
 #
 # aExporter : True pour que le fichier soit exporté dans le dossier
-#             plateaux_generes, sinon False
+#             plateaux_generes, sinon False.
+# cheminDossierExportation : chemin du fichier en cas d'exportation.
 # Retourne le plateau généré
 #
-def afficherMenuGeneration(aExporter: bool):
+def afficherMenuGeneration(aExporter: bool, cheminDossierExportation: str):
     
     try:
         
@@ -116,7 +121,7 @@ def afficherMenuGeneration(aExporter: bool):
         
         coinsOK = False
         while not coinsOK:
-            coins = input("Entrez 'oui', pour placer le départ et l'arrivé dans les coins, sinon 'non' => ")
+            coins = input("Entrez 'oui' pour placer le départ et l'arrivé dans les coins, sinon 'non' => ")
             coinsOK = coins == "oui" or coins == "non" 
             if not coinsOK:
                 print("La réponse doit s'agir de 'oui' ou 'non'\n") 
@@ -125,8 +130,9 @@ def afficherMenuGeneration(aExporter: bool):
         plateauGenere = genererPlateau(longueur, largeur, taux, coins)
         
         if aExporter:
-            genererFichier(plateauGenere, nomFichier)
-            print("\nLe plateau a été généré avec succès dans le dossier 'plateaux_generes' avec le nom '" + nomFichier + ".txt'")
+            genererFichier(plateauGenere, cheminDossierExportation, nomFichier)
+            print("\nLe plateau a été généré avec succès dans le dossier '" 
+                 + cheminDossierExportation + "' avec le nom '" + nomFichier + ".txt'")
         
         # Pour qu'il soit utilisé dans d'autres menu.
         return plateauGenere
@@ -137,7 +143,10 @@ def afficherMenuGeneration(aExporter: bool):
 #
 # Affiche le menu de génération de plateaux.
 #
-def afficherMenuResolution(plateau):
+# plateau : le plateau à résoudre, généralement celui importé.
+# cheminDossierResolution : dossier d'exportation du plateau résolu.
+#
+def afficherMenuResolution(plateau, cheminDossierResolution):
     
     reponse = ""
     questionOK = False;
@@ -150,11 +159,11 @@ def afficherMenuResolution(plateau):
     if reponse == "1":
         
         if plateau != None:
-            resoudrePlateau(plateau)
+            resoudrePlateau(plateau, cheminDossierResolution)
         else:
             print("\nVeuillez importer un plateau avant d'utiliser cette option.\n")
     else:
-        resoudrePlateau(afficherMenuGeneration(False))
+        resoudrePlateau(afficherMenuGeneration(False, ""), cheminDossierResolution)
    
 #
 # Affiche le menu de comparaison algorithmique.
@@ -167,20 +176,48 @@ def afficherMenuComparaison():
 # Résout un plateau donné et donne le résultat
 # dans un message.
 #
-def resoudrePlateau(plateau):
+# plateau : le plateau à résoudre, généralement celui importé.
+# cheminDossierResolution : dossier d'exportation du plateau résolu.
+#
+def resoudrePlateau(plateau, cheminDossierResolution):
     
+    estResolu = False
     instanceAStar = AlgorithmeAEtoile(plateau, heuristiques.heuristiqueVille)
     
     print("\nPlateau à résoudre : \n")
     print(plateau)
     print("Validité du plateau : " + str(plateau.estValide()))
     
+    # Résolution du plateau
     print("\nRésolution du plateau avec A* (par distance de Manhattan) : \n")
     try:
         instanceAStar.executionAlgo()
         print(instanceAStar.plateauParcouru)
+        estResolu = True
+        
     except Exception:
         print("Le chemin entre 'D' et 'A' est impossible !\n")
+    
+    # Exportation du fichier demandé
+    reponseExportation = ""
+    if estResolu:
+        print("Voulez-vous exporter le plateau résolu dans le dossier '" 
+             + cheminDossierResolution + "' ?")
+             
+        exportationOK = False
+        while not exportationOK:
+            reponseExportation = input("'oui' pour l'exporter, 'non' sinon => ")
+            exportationOK = reponseExportation == "oui" or reponseExportation == "non"
+            if not exportationOK:
+                print("La réponse doit s'agir de 'oui' ou 'non'\n") 
+                
+    if reponseExportation == "oui":
+        nomFichier = input("\nVeuillez renseigner le nom du fichier "
+                         + "à enregistrer => ")
+        genererFichier(instanceAStar.plateauParcouru, cheminDossierResolution, nomFichier)
+        print("\nLe plateau a été généré avec succès dans le dossier '" 
+             + cheminDossierResolution + "' avec le nom '" + nomFichier + ".txt'")
+            
 
 # Lance le menu principal
 if __name__ == "__main__":
