@@ -97,7 +97,7 @@ def afficherMenuGeneration(aExporter: bool, cheminDossierExportation: str):
         
         longueurOK = False
         while not longueurOK:
-            longueur = input("Entrez un entier pour la longueur du plateau (longueur des lignes >= 3) => ")
+            longueur = input("Entrez un entier pour la longueur du plateau (nombre de colonnes >= 3) => ")
             longueurOK = longueur.isnumeric() and int(longueur) >= 3
             if not longueurOK:
                 print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
