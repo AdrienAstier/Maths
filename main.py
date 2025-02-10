@@ -112,7 +112,7 @@ def afficherMenuGeneration(aExporter: bool, cheminDossierExportation: str):
     tauxOK = False
     while not tauxOK:
         taux = input("Entrez un nombre entre 0 et 1 pour le taux de murs (ex : 0.2) => ")
-        tauxOK = taux.replace('.', '', 1) and float(taux) >= .0 and float(taux) <= 1.0
+        tauxOK = taux.replace('.', '', 1).isnumeric() and float(taux) >= .0 and float(taux) <= 1.0
         if not tauxOK:
             print("Le flottant rentré est invalide, ou n'est pas inclut entre 0 et 1\n")
     taux = float(taux)
