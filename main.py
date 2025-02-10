@@ -45,15 +45,15 @@ def afficherMenuPrincipal():
             choix = -1
 
         if choix == 1:
+                        
+            chemin_plateau_candidat = input("Saisissez le chemin du plateau à importer : ")
+            plateau_candidat = importationPlateau(chemin_plateau_candidat)
             
-            chemin_plateau = input("Saisissez le chemin du plateau à importer : ")
-            plateau = importationPlateau(chemin_plateau)
-            
-            if plateau == None:
-                chemin_plateau = "N/A"
-            elif not plateau.estValide():
+            if plateau_candidat == None or not plateau_candidat.estValide():
                 print("Le plateau est invalide est n'a donc pas pu être importé.")
-                chemin_plateau = "N/A"
+            else: # Cas nominal
+                chemin_plateau = chemin_plateau_candidat
+                plateau = plateau_candidat
             
         elif choix == 2:
             afficherMenuGeneration(True, cheminDossierExportation)
