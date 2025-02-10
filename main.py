@@ -45,15 +45,15 @@ def afficherMenuPrincipal():
             choix = -1
 
         if choix == 1:
+                        
+            chemin_plateau_candidat = input("Saisissez le chemin du plateau à importer : ")
+            plateau_candidat = importationPlateau(chemin_plateau_candidat)
             
-            chemin_plateau = input("Saisissez le chemin du plateau à importer : ")
-            plateau = importationPlateau(chemin_plateau)
-            
-            if plateau == None:
-                chemin_plateau = "N/A"
-            elif not plateau.estValide():
+            if plateau_candidat == None or not plateau_candidat.estValide():
                 print("Le plateau est invalide est n'a donc pas pu être importé.")
-                chemin_plateau = "N/A"
+            else: # Cas nominal
+                chemin_plateau = chemin_plateau_candidat
+                plateau = plateau_candidat
             
         elif choix == 2:
             afficherMenuGeneration(True, cheminDossierExportation)
@@ -80,65 +80,60 @@ def afficherMenuPrincipal():
 # Retourne le plateau généré
 #
 def afficherMenuGeneration(aExporter: bool, cheminDossierExportation: str):
-    
-    try:
         
-        if aExporter:
-            nomFichier = input("\nVeuillez renseigner le nom du fichier "
-                             + "à enregistrer => ")
+    if aExporter:
+        nomFichier = input("\nVeuillez renseigner le nom du fichier "
+                         + "à enregistrer => ")
         
-        # Variables à vérifier
-        longueur = ""
-        largeur = ""
-        taux= ""
-        coins = ""
+    # Variables à vérifier
+    longueur = ""
+    largeur = ""
+    taux= ""
+    coins = ""
         
-        # Demande des variables à l'utilisateur.
+    # Demande des variables à l'utilisateur.
         
-        longueurOK = False
-        while not longueurOK:
-            longueur = input("Entrez un entier pour la longueur du plateau (longueur des lignes >= 3) => ")
-            longueurOK = longueur.isnumeric() and int(longueur) >= 3
-            if not longueurOK:
-                print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
-        longueur = int(longueur)
+    longueurOK = False
+    while not longueurOK:
+        longueur = input("Entrez un entier pour la longueur du plateau (longueur des lignes >= 3) => ")
+        longueurOK = longueur.isnumeric() and int(longueur) >= 3
+        if not longueurOK:
+            print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
+    longueur = int(longueur)
         
-        largeurOK = False
-        while not largeurOK:
-            largeur = input("Entrez un entier pour la largeur du plateau (nombre de lignes >= 3) => ")
-            largeurOK = largeur.isnumeric() and int(largeur) >= 3
-            if not largeurOK:
-                print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
-        largeur = int(largeur)
+    largeurOK = False
+    while not largeurOK:
+        largeur = input("Entrez un entier pour la largeur du plateau (nombre de lignes >= 3) => ")
+        largeurOK = largeur.isnumeric() and int(largeur) >= 3
+        if not largeurOK:
+            print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
+    largeur = int(largeur)
         
-        tauxOK = False
-        while not tauxOK:
-            taux = input("Entrez un nombre entre 0 et 1 pour le taux de murs (ex : 0.2) => ")
-            tauxOK = taux.replace('.', '', 1) and float(taux) >= .0 and float(taux) <= 1.0
-            if not tauxOK:
-                print("Le flottant rentré est invalide, ou n'est pas inclut entre 0 et 1\n")
-        taux = float(taux)
+    tauxOK = False
+    while not tauxOK:
+        taux = input("Entrez un nombre entre 0 et 1 pour le taux de murs (ex : 0.2) => ")
+        tauxOK = taux.replace('.', '', 1).isnumeric() and float(taux) >= .0 and float(taux) <= 1.0
+        if not tauxOK:
+            print("Le flottant rentré est invalide, ou n'est pas inclut entre 0 et 1\n")
+    taux = float(taux)
         
-        coinsOK = False
-        while not coinsOK:
-            coins = input("Entrez 'oui' pour placer le départ et l'arrivé dans les coins, sinon 'non' => ")
-            coinsOK = coins == "oui" or coins == "non" 
-            if not coinsOK:
-                print("La réponse doit s'agir de 'oui' ou 'non'\n") 
-        coins = coins == "oui"
+    coinsOK = False
+    while not coinsOK:
+        coins = input("Entrez 'oui' pour placer le départ et l'arrivé dans les coins, sinon 'non' => ")
+        coinsOK = coins == "oui" or coins == "non" 
+    if not coinsOK:
+        print("La réponse doit s'agir de 'oui' ou 'non'\n") 
+    coins = coins == "oui"
 
-        plateauGenere = genererPlateau(longueur, largeur, taux, coins)
+    plateauGenere = genererPlateau(longueur, largeur, taux, coins)
         
-        if aExporter:
-            genererFichier(plateauGenere, cheminDossierExportation, nomFichier)
-            print("\nLe plateau a été généré avec succès dans le dossier '" 
-                 + cheminDossierExportation + "' avec le nom '" + nomFichier + ".txt'")
+    if aExporter:
+        genererFichier(plateauGenere, cheminDossierExportation, nomFichier)
+        print("\nLe plateau a été généré avec succès dans le dossier '" 
+              + cheminDossierExportation + "' avec le nom '" + nomFichier + ".txt'")
         
-        # Pour qu'il soit utilisé dans d'autres menu.
-        return plateauGenere
-    
-    except ValueError:
-        print("Entrée invalide. Mauvais type.")
+    # Pour qu'il soit utilisé dans d'autres menu.
+    return plateauGenere
 
 #
 # Affiche le menu de génération de plateaux.
