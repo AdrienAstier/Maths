@@ -53,22 +53,8 @@ def calculComparaisons(largeur, longueur, tauxMin, tauxMax, coins, nbPlateaux, p
         moyennesOiseau.append(sommeOiseau / nbPlateaux)
         
     return (moyennesDijkstra, moyennesOiseau, moyennesVille, tauxCasesInterdites)
-
-
-def comparaisonHeuristiquesDeux(moyennesPremiere, moyennesSeconde, taux,
-                                labelPremiere, labelSeconde) :
     
-    fig, graph = plt.subplots(1, 1, sharex=True, constrained_layout=True)
-    
-    graph.plot(taux, moyennesPremiere, label=labelPremiere)
-    graph.plot(taux, moyennesSeconde, label=labelSeconde)
-    graph.legend(loc='upper right')
-    graph.set_ylabel('Nombre d\'étapes')
-    graph.set_xlabel('Taux de cases interdites')
-
-    plt.show()
-    
-def comparaisonHeuristiquesTroix(moyennesPremiere, moyennesDeuxieme, moyennesTroisieme,
+def comparaisonHeuristiques(moyennesPremiere, moyennesDeuxieme, moyennesTroisieme,
                             taux, labelPremiere, labelDeuxieme, labelTroisieme) :
     
     fig, graph = plt.subplots(1, 1, sharex=True, constrained_layout=True)
@@ -87,4 +73,4 @@ if __name__ == "__main__":
     
     (dijkstra, oiseau, ville, taux) = calculComparaisons(20, 20, 0, 0.95, False, 50, 20)
 
-    comparaisonHeuristiquesTroix(dijkstra, ville, oiseau, taux, "Dijkstra", "Ville", "Oiseau")
+    comparaisonHeuristiques(dijkstra, ville, oiseau, taux, "Dijkstra", "Ville", "Oiseau")
