@@ -231,7 +231,7 @@ def afficherMenuComparaison():
     # Début de la comparaison
     
     (dijkstra, oiseau, ville, taux) = calculComparaisons(largeur, longueur, tauxMin, tauxMax, coins, nbrPlateaux, precision)
-    comparaisonHeuristiques(dijkstra, ville, oiseau, taux, "Dijkstra", "Ville", "Oiseau")
+    comparaisonHeuristiques(dijkstra, ville, oiseau, taux, "Dijkstra", "Ville", "Oiseau", longueur, largeur, nbrPlateaux)
 
 #
 # Résout un plateau donné et donne le résultat

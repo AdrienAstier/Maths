@@ -55,7 +55,8 @@ def calculComparaisons(largeur, longueur, tauxMin, tauxMax, coins, nbPlateaux, p
     return (moyennesDijkstra, moyennesOiseau, moyennesVille, tauxCasesInterdites)
     
 def comparaisonHeuristiques(moyennesPremiere, moyennesDeuxieme, moyennesTroisieme,
-                            taux, labelPremiere, labelDeuxieme, labelTroisieme) :
+                            taux, labelPremiere, labelDeuxieme, labelTroisieme,
+                            longueur, largeur, nbPlateaux) :
     
     fig, graph = plt.subplots(1, 1, sharex=True, constrained_layout=True)
     
@@ -63,14 +64,9 @@ def comparaisonHeuristiques(moyennesPremiere, moyennesDeuxieme, moyennesTroisiem
     graph.plot(taux, moyennesDeuxieme, label=labelDeuxieme)
     graph.plot(taux, moyennesTroisieme, label=labelTroisieme)
     graph.legend(loc='upper right')
-    graph.set_ylabel('Nombre d\'étapes')
+    plt.title("Comparaison de A* (oiseau et ville) et Dijkstra en fonction du taux de cases interdites")
+    plt.suptitle("Plateaux de dimensions fixes (largeur=" + str(largeur) + ", longueur =" + str(longueur) + ")")
+    graph.set_ylabel('Nombre de cases visitées pour relier D à A\nMoyenne obtenue sur ' + str(nbPlateaux) + ' plateaux')
     graph.set_xlabel('Taux de cases interdites')
 
     plt.show()
-
-
-if __name__ == "__main__":
-    
-    (dijkstra, oiseau, ville, taux) = calculComparaisons(20, 20, 0, 0.95, False, 50, 20)
-
-    comparaisonHeuristiques(dijkstra, ville, oiseau, taux, "Dijkstra", "Ville", "Oiseau")

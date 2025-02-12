@@ -148,7 +148,7 @@ class AlgorithmeAEtoile:
         pointMin = self.listeOuverte[0]
         for point in self.listeOuverte :
             sommeDistances = point[2] + point[3]
-            if sommeDistances < min :
+            if sommeDistances < min or sommeDistances == min and point[3] < pointMin[3] :
                 min = sommeDistances
                 pointMin = point
         
