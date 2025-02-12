@@ -65,7 +65,7 @@ def comparaisonHeuristiques(moyennesPremiere, moyennesDeuxieme, moyennesTroisiem
     graph.plot(taux, moyennesTroisieme, label=labelTroisieme)
     graph.legend(loc='upper right')
     plt.title("Comparaison de A* (oiseau et ville) et Dijkstra en fonction du taux de cases interdites")
-    plt.suptitle("Plateaux de dimensions fixes (largeur=" + str(largeur) + ", longueur =" + str(longueur) + ")")
+    plt.suptitle("Plateaux de dimensions fixes (largeur=" + str(largeur) + ", longueur=" + str(longueur) + ")")
     graph.set_ylabel('Nombre de cases visitées pour relier D à A\nMoyenne obtenue sur ' + str(nbPlateaux) + ' plateaux')
     graph.set_xlabel('Taux de cases interdites')
 

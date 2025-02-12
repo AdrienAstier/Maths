@@ -50,6 +50,8 @@ def afficherMenuPrincipal():
         if choix == 1:
                         
             chemin_plateau_candidat = input("Saisissez le chemin du plateau à importer : ")
+            
+            print("\nImportation du plateau en cours...\n")
             plateau_candidat = importationPlateau(chemin_plateau_candidat)
             
             if plateau_candidat == None or not plateau_candidat.estValide():
@@ -122,9 +124,12 @@ def afficherMenuGeneration(aExporter: bool, cheminDossierExportation: str):
         print("La réponse doit s'agir de 'oui' ou 'non'\n") 
     coins = coins == "oui"
 
+    print("\nGénération du plateau en cours...\n")
     plateauGenere = genererPlateau(longueur, largeur, taux, coins)
         
     if aExporter:
+        
+        print("\nExportation du plateau dans un fichier texte...\n")
         genererFichier(plateauGenere, cheminDossierExportation, nomFichier)
         print("\nLe plateau a été généré avec succès dans le dossier '" 
               + cheminDossierExportation + "' avec le nom '" + nomFichier + ".txt'")
@@ -230,6 +235,8 @@ def afficherMenuComparaison():
     
     # Début de la comparaison
     
+    print("\nVeuillez patienter le temps que les comparaisons se finissent...\n")
+    
     (dijkstra, oiseau, ville, taux) = calculComparaisons(largeur, longueur, tauxMin, tauxMax, coins, nbrPlateaux, precision)
     comparaisonHeuristiques(dijkstra, ville, oiseau, taux, "Dijkstra", "Ville", "Oiseau", longueur, largeur, nbrPlateaux)
 
@@ -250,7 +257,7 @@ def resoudrePlateau(plateau, cheminDossierResolution):
     print("Validité du plateau : " + str(plateau.estValide()))
     
     # Résolution du plateau
-    print("\nRésolution du plateau avec A* (par distance de Manhattan) : \n")
+    print("\nRésolution du plateau avec A* (par distance de Manhattan)... \n")
     try:
         instanceAStar.executionAlgo()
         print(instanceAStar.plateauParcouru)
@@ -273,8 +280,11 @@ def resoudrePlateau(plateau, cheminDossierResolution):
                 print("La réponse doit s'agir de 'oui' ou 'non'\n") 
                 
     if reponseExportation == "oui":
+        
         nomFichier = input("\nVeuillez renseigner le nom du fichier "
                          + "à enregistrer => ")
+                         
+        print("\nExportation du plateau résolu en cours...\n")
         genererFichier(instanceAStar.plateauParcouru, cheminDossierResolution, nomFichier)
         print("\nLe plateau a été généré avec succès dans le dossier '" 
              + cheminDossierResolution + "' avec le nom '" + nomFichier + ".txt'")
