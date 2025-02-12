@@ -7,6 +7,9 @@
 from algorithmeAEtoile import AlgorithmeAEtoile
 import heuristiques
 
+from comparaison import calculComparaisons
+from comparaison import comparaisonHeuristiques
+
 from gestionFichier import genererFichier
 from gestionFichier import importationPlateau
 from generationPlateau import genererPlateau
@@ -85,12 +88,6 @@ def afficherMenuGeneration(aExporter: bool, cheminDossierExportation: str):
         nomFichier = input("\nVeuillez renseigner le nom du fichier "
                          + "à enregistrer => ")
         
-    # Variables à vérifier
-    longueur = ""
-    largeur = ""
-    taux= ""
-    coins = ""
-        
     # Demande des variables à l'utilisateur.
         
     longueurOK = False
@@ -164,8 +161,77 @@ def afficherMenuResolution(plateau, cheminDossierResolution):
 # Affiche le menu de comparaison algorithmique.
 #
 def afficherMenuComparaison():
-    # TODO menu
-    print("Comparer algorithmes")
+        
+    # Demande des variables à l'utilisateur.
+        
+    longueurOK = False
+    while not longueurOK:
+        longueur = input("Entrez un entier pour la longueur du plateau (nombre de colonnes >= 3) => ")
+        longueurOK = longueur.isnumeric() and int(longueur) >= 3
+        if not longueurOK:
+            print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
+    longueur = int(longueur)
+        
+    largeurOK = False
+    while not largeurOK:
+        largeur = input("Entrez un entier pour la largeur du plateau (nombre de lignes >= 3) => ")
+        largeurOK = largeur.isnumeric() and int(largeur) >= 3
+        if not largeurOK:
+            print("L'entier rentré est invalide, il doit supérieur ou égal à 3\n")
+    largeur = int(largeur)
+    
+    # Gestion des bornes du taux.
+    tauxMinInfMax = False
+    while not tauxMinInfMax:
+        
+        tauxMinOK = False
+        while not tauxMinOK:
+            tauxMin = input("Entrez un nombre entre 0 et 1 (non inclus) pour la borne inférieure de taux de murs testés (ex : 0.2) => ")
+            tauxMinOK = tauxMin.replace('.', '', 1).isnumeric() and float(tauxMin) >= .0 and float(tauxMin) < 1.0
+            if not tauxMinOK:
+                print("Le flottant rentré est invalide, ou n'est pas inclut entre 0 et 1\n")
+        tauxMin = float(tauxMin)
+        
+        tauxMaxOK = False
+        while not tauxMaxOK:
+            tauxMax = input("Entrez un nombre entre 0 et 1 (non inclus) pour la borne supérieure de taux de murs testés (ex : 0.5) => ")
+            tauxMaxOK = tauxMax.replace('.', '', 1).isnumeric() and float(tauxMax) >= .0 and float(tauxMax) < 1.0
+            if not tauxMaxOK:
+                print("Le flottant rentré est invalide, ou n'est pas inclut entre 0 et 1\n")
+        tauxMax = float(tauxMax)
+        
+        tauxMinInfMax = tauxMin < tauxMax
+        if not tauxMinInfMax:
+            print("La borne inférieure du taux n'est pas inférieure à la borne supérieure. Veuillez recommencer\n")
+    
+    nbrPlateauxOK = False
+    while not nbrPlateauxOK:
+        nbrPlateaux = input("Entrez le nombre de plateaux sur lequel la moyenne sera obtenu (nombre de plateaux > 0) => ")
+        nbrPlateauxOK = nbrPlateaux.isnumeric() and int(nbrPlateaux) > 0
+        if not nbrPlateauxOK:
+            print("L'entier rentré est invalide, il doit être supérieur à 0 \n")
+    nbrPlateaux = int(nbrPlateaux)
+    
+    precisionOK = False
+    while not precisionOK:
+        precision = input("Entrez le pas de la comparaison (en pourcentage, ex: 1 pour 1%) => ")
+        precisionOK = precision.replace('.', '', 1).isnumeric() and float(precision) > 0 and float(precision) < 100
+        if not precisionOK:
+            print("Le flottant rentré est invalide, ou n'est pas inclut entre 0 et 100\n")
+    precision = 100 / float(precision)
+    
+    coinsOK = False
+    while not coinsOK:
+        coins = input("Entrez 'oui' pour placer le départ et l'arrivé dans les coins, sinon 'non' => ")
+        coinsOK = coins == "oui" or coins == "non" 
+    if not coinsOK:
+        print("La réponse doit s'agir de 'oui' ou 'non'\n") 
+    coins = coins == "oui"
+    
+    # Début de la comparaison
+    
+    (dijkstra, oiseau, ville, taux) = calculComparaisons(largeur, longueur, tauxMin, tauxMax, coins, nbrPlateaux, precision)
+    comparaisonHeuristiques(dijkstra, ville, oiseau, taux, "Dijkstra", "Ville", "Oiseau")
 
 #
 # Résout un plateau donné et donne le résultat
