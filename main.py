@@ -249,15 +249,29 @@ def afficherMenuComparaison():
 #
 def resoudrePlateau(plateau, cheminDossierResolution):
     
+    heuristiqueOK = False
+    while not heuristiqueOK:
+        heuristique = input("Entrez l'heuristique a utiliser (nulle / ville / oiseau) => ")
+        heuristiqueOK = heuristique == "oiseau" or heuristique == "ville" or heuristique == "nulle" 
+        if not heuristiqueOK:
+            print("La réponse ne peut être que 'oiseau', 'ville' ou 'nulle'.\n") 
+
+    if heuristique == "nulle" :
+        heuristique = heuristiques.heuristiqueNulle
+    elif heuristique == "ville" :
+        heuristique = heuristiques.heuristiqueVille
+    else :
+        heuristique = heuristiques.heuristiqueOiseau
+
     estResolu = False
-    instanceAStar = AlgorithmeAEtoile(plateau, heuristiques.heuristiqueVille)
+    instanceAStar = AlgorithmeAEtoile(plateau, heuristique)
     
     print("\nPlateau à résoudre : \n")
     print(plateau)
     print("Validité du plateau : " + str(plateau.estValide()))
-    
+
     # Résolution du plateau
-    print("\nRésolution du plateau avec A* (par distance de Manhattan)... \n")
+    print("\nRésolution du plateau avec A* ... \n")
     try:
         instanceAStar.executionAlgo()
         print(instanceAStar.plateauParcouru)
@@ -269,6 +283,9 @@ def resoudrePlateau(plateau, cheminDossierResolution):
     # Exportation du fichier demandé
     reponseExportation = ""
     if estResolu:
+
+        print("La longueur du chemin critique est " + str(len(instanceAStar.getCheminCritique())) + ".\n")
+
         print("Voulez-vous exporter le plateau résolu dans le dossier '" 
              + cheminDossierResolution + "' ?")
              
